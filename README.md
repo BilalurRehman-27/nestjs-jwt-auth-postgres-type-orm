@@ -66,7 +66,7 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 
 ## Stay in touch
 
-- Author - [Bilal ur Rehman](bilal_ur_rehman@outlook.com)
+- Author - [Bilal ur Rehman](https://github.com/BilalurRehman-27)
 - LinkedIn - [BilalurRehman](https://www.linkedin.com/in/bilal-ur-rehman/)
 
 ## License
