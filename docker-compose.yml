@@ -1,0 +1,27 @@
+version: '3'
+services:
+  # app:
+  #   env_file:
+  #     - .env
+  #   container_name: '${APP_CONTAINER_NAME}'
+  #   restart: always
+  #   image: '${APP_IMAGE_NAME}'
+  #   build: .
+  #   ports:
+  #     - '${APP_PORT}:${APP_PORT}'
+  #   depends_on:
+  #     - db
+  db:
+    env_file:
+      - .env
+    container_name: '${DB_CONTAINER_NAME}'
+    restart: always
+    image: postgres:12-alpine
+    environment:
+      POSTGRES_USER: '${DATABASE_USERNAME}'
+      POSTGRES_DB: '${DATABASE_NAME}'
+      POSTGRES_PASSWORD: '${DATABASE_PASSWORD}'
+    ports:
+      - '${DATABASE_PORT}:${DATABASE_PORT}'
+    volumes:
+      - ./db-data:/var/lib/postgresql/data
