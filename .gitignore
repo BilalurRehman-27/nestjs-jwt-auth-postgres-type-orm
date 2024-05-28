@@ -39,3 +39,4 @@ lerna-debug.log*
 .env
 .env.testing
 .env.development
+.vercel
