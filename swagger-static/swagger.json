@@ -1,0 +1,176 @@
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/": {
+      "get": {
+        "operationId": "AppController_getHello",
+        "summary": "This endpoint is used for health checks at the URL \"/\". If it doesn't return a 200, the container will fail to deploy.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/_health": {
+      "get": {
+        "operationId": "AppController_healthCheck",
+        "summary": "This endpoint is used for internal and external health-checks. If it doesn't return a 200, the container will fail to deploy \"/\" removed from the ALB",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/v1/auth/login": {
+      "post": {
+        "operationId": "AuthController_login",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserAuthModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "auth"
+        ]
+      }
+    },
+    "/v1/auth/register": {
+      "post": {
+        "operationId": "AuthController_register",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateUserDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "auth"
+        ]
+      }
+    },
+    "/v1/users/me": {
+      "get": {
+        "operationId": "UsersController_myProfile",
+        "summary": "Retrieves the authorized user",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "users"
+        ],
+        "security": [
+          {
+            "default": []
+          }
+        ]
+      }
+    }
+  },
+  "info": {
+    "title": "NestJs Auth Api Swagger Service",
+    "description": "api endpoints",
+    "version": "1.0",
+    "contact": {}
+  },
+  "tags": [],
+  "servers": [
+    {
+      "url": "http://localhost:3001"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "default": {
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "type": "http"
+      }
+    },
+    "schemas": {
+      "UserAuthModel": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "Email of user"
+          },
+          "password": {
+            "type": "string",
+            "description": "Password"
+          }
+        },
+        "required": [
+          "email",
+          "password"
+        ]
+      },
+      "CreateUserDto": {
+        "type": "object",
+        "properties": {
+          "userName": {
+            "type": "string",
+            "description": "User name"
+          },
+          "email": {
+            "type": "string",
+            "description": "Email of user"
+          },
+          "password": {
+            "type": "string",
+            "description": "Password"
+          },
+          "isActive": {
+            "type": "boolean",
+            "description": "Is active"
+          },
+          "status": {
+            "type": "string",
+            "description": "User type"
+          },
+          "lastLogin": {
+            "format": "date-time",
+            "type": "string",
+            "description": "lastLogin",
+            "default": null
+          }
+        },
+        "required": [
+          "userName",
+          "email",
+          "password",
+          "isActive",
+          "status",
+          "lastLogin"
+        ]
+      }
+    }
+  }
+}

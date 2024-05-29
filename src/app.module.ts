@@ -1,15 +1,17 @@
-import * as dotenv from 'dotenv';
-import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { PassportModule } from '@nestjs/passport';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import * as dotenv from 'dotenv';
+import { join } from 'path';
+import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import appConfig from './config/app.config';
-import { AppController } from './app.controller';
 import { typeOrmAsyncConfig } from './config/db/db';
-import { PassportModule } from '@nestjs/passport';
-import { User } from './modules/users/entities/user.entity';
 import { AuthModule } from './modules/auth/auth.module';
 import { UserAuthModel } from './modules/users/dto/user-auth.dto';
+import { User } from './modules/users/entities/user.entity';
 
 dotenv.config();
 
@@ -24,6 +26,10 @@ dotenv.config();
       load: [appConfig],
       cache: true,
       envFilePath: [process.env.ENV_FILE, '.env.development'],
+    }),
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'swagger-static'),
+      serveRoot: process.env.NODE_ENV === 'development' ? '/' : '/swagger',
     }),
   ],
   controllers: [AppController],

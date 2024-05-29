@@ -1,10 +1,12 @@
-import helmet from 'helmet';
-import { json } from 'express';
-import { NestFactory } from '@nestjs/core';
+import { ValidationPipe, VersioningType } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { VersioningType, ValidationPipe } from '@nestjs/common';
-import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { NestFactory } from '@nestjs/core';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { json } from 'express';
+import helmet from 'helmet';
 import { AppModule } from './app.module';
+import { resolve } from 'path';
+import { writeFileSync } from 'fs';
 
 const API_VERSION = '1';
 async function bootstrap() {
@@ -52,18 +54,21 @@ async function bootstrap() {
     swaggerOptions: {
       persistAuthorization: true,
     },
-    customSiteTitle: 'NestJs Auth with Swagger UI',
-    customfavIcon: 'https://avatars.githubusercontent.com/u/6936373?s=200&v=4',
-    customJs: [
-      'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui-bundle.min.js',
-      'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui-standalone-preset.min.js',
-    ],
-    customCssUrl: [
-      'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui.min.css',
-      'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui-standalone-preset.min.css',
-      'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui.css',
-    ],
   });
+  // get the swagger json file (if app is running in development mode)
+  if (process.env.NODE_ENV === 'development') {
+    const pathToSwaggerStaticFolder = resolve(process.cwd(), 'swagger-static');
+
+    // write swagger json file
+    const pathToSwaggerJson = resolve(
+      pathToSwaggerStaticFolder,
+      'swagger.json',
+    );
+    const swaggerJson = JSON.stringify(document, null, 2);
+    writeFileSync(pathToSwaggerJson, swaggerJson);
+    console.log(`Swagger JSON file written to: '/swagger-static/swagger.json'`);
+  }
+
   const configService = app.get<ConfigService>(ConfigService);
 
   await app.listen(configService.get<number>('app.port'), () => {
