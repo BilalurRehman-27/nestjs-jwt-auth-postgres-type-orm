@@ -6,7 +6,8 @@ import { json } from 'express';
 import helmet from 'helmet';
 import { AppModule } from './app.module';
 import { resolve } from 'path';
-import { writeFileSync } from 'fs';
+import { createWriteStream, writeFileSync } from 'fs';
+import { get } from 'https';
 
 const API_VERSION = '1';
 async function bootstrap() {
@@ -56,17 +57,62 @@ async function bootstrap() {
     },
   });
   // get the swagger json file (if app is running in development mode)
-  if (process.env.NODE_ENV === 'development') {
-    const pathToSwaggerStaticFolder = resolve(process.cwd(), 'swagger-static');
+  // if (process.env.NODE_ENV === 'development') {
+  //   const pathToSwaggerStaticFolder = resolve(process.cwd(), 'swagger-static');
 
-    // write swagger json file
-    const pathToSwaggerJson = resolve(
-      pathToSwaggerStaticFolder,
-      'swagger.json',
+  //   // write swagger json file
+  //   const pathToSwaggerJson = resolve(
+  //     pathToSwaggerStaticFolder,
+  //     'swagger.json',
+  //   );
+  //   const swaggerJson = JSON.stringify(document, null, 2);
+  //   writeFileSync(pathToSwaggerJson, swaggerJson);
+  //   console.log(`Swagger JSON file written to: '/swagger-static/swagger.json'`);
+  // }
+  // get the swagger json file (if app is running in development mode)
+  if (process.env.NODE_ENV === 'development') {
+    // write swagger ui files
+    get(
+      `${'https://nestjs-jwt-auth-postgres-type-op83gamgp.vercel.app'}/swagger/swagger-ui-bundle.js`,
+      function (response) {
+        response.pipe(createWriteStream('swagger-static/swagger-ui-bundle.js'));
+        console.log(
+          `Swagger UI bundle file written to: '/swagger-static/swagger-ui-bundle.js'`,
+        );
+      },
     );
-    const swaggerJson = JSON.stringify(document, null, 2);
-    writeFileSync(pathToSwaggerJson, swaggerJson);
-    console.log(`Swagger JSON file written to: '/swagger-static/swagger.json'`);
+
+    get(
+      `${'https://nestjs-jwt-auth-postgres-type-op83gamgp.vercel.app'}/swagger/swagger-ui-init.js`,
+      function (response) {
+        response.pipe(createWriteStream('swagger-static/swagger-ui-init.js'));
+        console.log(
+          `Swagger UI init file written to: '/swagger-static/swagger-ui-init.js'`,
+        );
+      },
+    );
+
+    get(
+      `${'https://nestjs-jwt-auth-postgres-type-op83gamgp.vercel.app'}/swagger/swagger-ui-standalone-preset.js`,
+      function (response) {
+        response.pipe(
+          createWriteStream('swagger-static/swagger-ui-standalone-preset.js'),
+        );
+        console.log(
+          `Swagger UI standalone preset file written to: '/swagger-static/swagger-ui-standalone-preset.js'`,
+        );
+      },
+    );
+
+    get(
+      `${'https://nestjs-jwt-auth-postgres-type-op83gamgp.vercel.app'}/swagger/swagger-ui.css`,
+      function (response) {
+        response.pipe(createWriteStream('swagger-static/swagger-ui.css'));
+        console.log(
+          `Swagger UI css file written to: '/swagger-static/swagger-ui.css'`,
+        );
+      },
+    );
   }
 
   const configService = app.get<ConfigService>(ConfigService);
