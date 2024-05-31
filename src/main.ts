@@ -25,8 +25,9 @@ async function bootstrap() {
       ? '*'
       : process.env.ALLOWED_ORIGINS.split(',');
 
+  console.log('🚀 ~ bootstrap ~ origin:', origin);
   app.enableCors({ origin });
-  app.use(helmet());
+  // app.use(helmet());
   app.useGlobalPipes(new ValidationPipe({ transform: true, whitelist: true }));
   app.use(json({ limit: 'Infinity' }));
 
