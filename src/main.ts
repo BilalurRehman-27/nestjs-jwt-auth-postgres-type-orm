@@ -25,9 +25,7 @@ async function bootstrap() {
       ? '*'
       : process.env.ALLOWED_ORIGINS.split(',');
 
-  console.log('🚀 ~ bootstrap ~ origin:', origin);
   app.enableCors({ origin });
-  // app.use(helmet());
   app.useGlobalPipes(new ValidationPipe({ transform: true, whitelist: true }));
   app.use(json({ limit: 'Infinity' }));
 
@@ -68,7 +66,7 @@ async function bootstrap() {
   });
 
   const configService = app.get<ConfigService>(ConfigService);
-
+  app.use(helmet());
   await app.listen(configService.get<number>('app.port'), () => {
     console.log(
       `Nest app is listening on port ${configService.get<number>(
