@@ -64,6 +64,10 @@ $ npm run test:cov
 
 Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
 
+## Deployment
+
+This application is also deployed on [vercel](https://nestjs-jwt-auth-postgres-type-jmeslp9d4.vercel.app/api)
+
 ## Stay in touch
 
 - Author - [Bilal ur Rehman](https://github.com/BilalurRehman-27)
