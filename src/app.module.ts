@@ -10,6 +10,8 @@ import { PassportModule } from '@nestjs/passport';
 import { User } from './modules/users/entities/user.entity';
 import { AuthModule } from './modules/auth/auth.module';
 import { UserAuthModel } from './modules/users/dto/user-auth.dto';
+import { APP_GUARD } from '@nestjs/core';
+import { AuthGuard } from './modules/auth/auth.guard';
 
 dotenv.config();
 
@@ -27,7 +29,13 @@ dotenv.config();
     }),
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_GUARD,
+      useClass: AuthGuard,
+    },
+  ],
   exports: [AppService],
 })
 export class AppModule {}
